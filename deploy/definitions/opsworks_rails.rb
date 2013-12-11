@@ -24,6 +24,16 @@ define :opsworks_rails do
     variables(:config => deploy[:config])
   end
 
+  # write out newrelic.yml
+  template "#{deploy[:deploy_to]}/shared/config/newrelic.yml" do
+    cookbook "rails"
+    source "newrelic.yml.erb"
+    mode "0600"
+    owner deploy[:user]
+    group deploy[:group]
+    variables(:config => deploy[:newrelic])
+  end
+
   execute "symlinking subdir mount if necessary" do
     command "rm -f /var/www/#{deploy[:mounted_at]}; ln -s #{deploy[:deploy_to]}/current/public /var/www/#{deploy[:mounted_at]}"
     action :run
