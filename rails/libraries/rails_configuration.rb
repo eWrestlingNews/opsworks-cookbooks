@@ -37,8 +37,8 @@ module OpsWorks
     def self.bundle(app_name, app_config, app_root_path)
       if File.exists?("#{app_root_path}/Gemfile")
         Chef::Log.info("Gemfile detected. Running bundle install.")
-        Chef::Log.info("sudo su deploy -c 'cd #{app_root_path} && /usr/local/bin/bundle install --path #{app_config[:home]}/.bundler/#{app_name} --without=#{app_config[:ignore_bundler_groups].join(' ')} #{'--local' if app_config[:bundler_deploy_local}")
-        Chef::Log.info(`sudo su deploy -c 'cd #{app_root_path} && /usr/local/bin/bundle install --path #{app_config[:home]}/.bundler/#{app_name} --without=#{app_config[:ignore_bundler_groups].join(' ')} #{'--local' if app_config[:bundler_deploy_local} 2>&1'`)
+        Chef::Log.info("sudo su deploy -c 'cd #{app_root_path} && /usr/local/bin/bundle install --path #{app_config[:home]}/.bundler/#{app_name} --without=#{app_config[:ignore_bundler_groups].join(' ')} #{'--local' if app_config[:bundler_deploy_local]}")
+        Chef::Log.info(`sudo su deploy -c 'cd #{app_root_path} && /usr/local/bin/bundle install --path #{app_config[:home]}/.bundler/#{app_name} --without=#{app_config[:ignore_bundler_groups].join(' ')} #{'--local' if app_config[:bundler_deploy_local]} 2>&1'`)
       end
     end
   end
