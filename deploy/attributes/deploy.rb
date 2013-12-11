@@ -72,6 +72,8 @@ node[:deploy].each do |application, deploy|
   # nodejs
   default[:deploy][application][:nodejs][:restart_command] = "monit restart node_web_app_#{application}"
   default[:deploy][application][:nodejs][:stop_command] = "monit stop node_web_app_#{application}"
+
+  default[:deploy][application][:newrelic] = node[:deploy][application][:newrelic]
 end
 
 default[:opsworks][:skip_uninstall_of_other_rails_stack] = false
