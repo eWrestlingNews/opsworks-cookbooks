@@ -57,7 +57,7 @@ if !!node[:elasticsearch][:basic_auth]
   end
 end
 
-directory node[:elasticsearch][:pids] do
+directory node[:elasticsearch][:path][:pids] do
   user node[:elasticsearch][:user]
   group node[:elasticsearch][:user]
   mode 0644
