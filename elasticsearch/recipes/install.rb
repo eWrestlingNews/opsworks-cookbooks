@@ -56,3 +56,11 @@ if !!node[:elasticsearch][:basic_auth]
     not_if "ls #{node[:elasticsearch][:path][:plugins]}/http-basic"
   end
 end
+
+directory node[:elasticsearch][:pids] do
+  user node[:elasticsearch][:user]
+  group node[:elasticsearch][:user]
+  mode 0644
+  action :create
+  recursive true
+end

@@ -16,7 +16,7 @@ default.elasticsearch[:path][:conf] = [node.elasticsearch[:home_dir], "config"].
 default.elasticsearch[:path][:data] = [node.elasticsearch[:home_dir], "data"].join('/')
 default.elasticsearch[:path][:plugins] = [node.elasticsearch[:home_dir], "plugins"].join('/')
 default.elasticsearch[:path][:logs] = ['/var/log',node.elasticsearch[:user]].join('/')
-default.elasticsearch[:path][:pids] = '/var/run'
+default.elasticsearch[:path][:pids] = '/var/run/elasticsearch'
 default.elasticsearch[:pid_file]  = [node.elasticsearch[:path][:pids], "elasticsearch.pid"].join('/')
 
 # === MEMORY
