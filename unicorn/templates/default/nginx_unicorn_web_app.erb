@@ -17,7 +17,7 @@ server {
 
   keepalive_timeout 5;
 
-  rewrite ^/community(/.*\.php.*)$ http://forum.ewrestlingnews.com/$1 last;
+  rewrite ^/community(/.*\.php.*)$ http://forum.ewrestlingnews.com$1 last;
 
   root <%= @application[:absolute_document_root] %>;
 
