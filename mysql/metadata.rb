@@ -4,7 +4,7 @@ description       "Installs and configures MySQL"
 version           "0.1"
 recipe            "mysql::client", "Installs MySQL"
 recipe            "mysql::server", "Installs MySQL"
-recipe           "mysql::backup", "Installs MySQL backup scripts"
+recipe            "mysql::backup", "Installs MySQL backup scripts"
 
 ['centos','redhat','fedora','amazon','debian','ubuntu'].each do |os|
   supports os
