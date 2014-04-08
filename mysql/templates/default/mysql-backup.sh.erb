@@ -1,0 +1,27 @@
+#!/bin/sh
+
+DATE=`date +%Y-%m-%d`
+mkdir -p "<%= node[:mysql_backup][:target_directory] %>/mysql"
+
+# Remove all backups more than <%= node[:mysql_backup][:retention_days] %> days old.
+echo "OLD BACKUPS REMOVED:"
+echo "--------------------"
+find "<%= node[:mysql_backup][:target_directory] %>/mysql" -type f -mtime +<%= node[:mysql_backup][:retention_days] %> -exec echo "-> {}" \; -exec rm {} \;
+echo ""
+
+# Get a list of databases available on the server.
+LIST=$(mysql --user=root --password=<%= node[:mysql][:server_root_password] %> -e "SHOW DATABASES;" | tr -d "| " | grep -v Database)
+
+# Backup each database to its own file.
+echo "DUMPING DATABASES:"
+echo "------------------"
+for DB in $LIST; do
+
+  DB_FILE="<%= node[:mysql_backup][:target_directory] %>/mysql/<%= node[:fqdn] %>_${DATE}_$DB.sql.gz"
+  mysqldump --stream=tar --user=<%= node[:mysql_backup][:user] %> --password=<%= node[:mysql_backup][:password] %> --databases=$DB ./ | gzip - > $DB_FILE
+  DB_FILE_SIZE=`du -h "$DB_FILE" | awk -F" " '{print $1}'`
+
+  echo "$DB -> $DB_FILE ($DB_FILE_SIZE)"
+
+done
+echo ""
