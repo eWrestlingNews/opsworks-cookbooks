@@ -18,7 +18,7 @@ echo "------------------"
 for DB in $LIST; do
 
   DB_FILE="<%= node[:mysql_backup][:target_directory] %>/<%= node[:fqdn] %>_${DATE}_$DB.sql.gz"
-  mysqldump --stream=tar --user=root --password=<%= node[:mysql][:server_root_password] %> --databases=$DB ./ | gzip - > $DB_FILE
+  innobackupex --stream=tar --user=root --password=<%= node[:mysql][:server_root_password] %> --databases=$DB ./ | gzip - > $DB_FILE
   DB_FILE_SIZE=`du -h "$DB_FILE" | awk -F" " '{print $1}'`
 
   echo "$DB -> $DB_FILE ($DB_FILE_SIZE)"
