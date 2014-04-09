@@ -35,7 +35,7 @@ end
 bash "extract_xtrabackup" do
   code <<-EOL
   rm -rf #{extract_path}/*
-  tar xzvf #{src_filepath} -C #{extract_path}
+  tar xzvf #{src_filepath} -C #{extract_path} --strip-components=1
   cp #{extract_path}/* /usr/local/bin/
   EOL
 end
