@@ -24,7 +24,6 @@ extract_path = "#{Chef::Config['file_cache_path']}/percona-xtrabackup"
 remote_file src_filepath do
   source node['mysql_backup']['xtrabackup']
   action :create_if_missing
-  notifies :run, 'bash[extract_xtrabackup]'
 end
 
 directory extract_path do
@@ -36,7 +35,7 @@ bash "extract_xtrabackup" do
   code <<-EOL
   rm -rf #{extract_path}/*
   tar xzvf #{src_filepath} -C #{extract_path} --strip-components=1
-  cp #{extract_path}/* /usr/local/bin/
+  cp #{extract_path}/bin/* /usr/local/bin/
   EOL
 end
 
