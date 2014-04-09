@@ -27,6 +27,11 @@ remote_file src_filepath do
   notifies :run, 'bash[extract_xtrabackup]'
 end
 
+dir extract_path do
+  action :create
+  not_if { Dir.exists?(extract_path) }
+end
+
 bash "extract_xtrabackup" do
   code <<-EOL
   tar xzvf #{src_filepath} -C #{extract_path}
