@@ -34,10 +34,10 @@ end
 
 bash "extract_xtrabackup" do
   code <<-EOL
+  rm -rf #{extract_path}/*
   tar xzvf #{src_filepath} -C #{extract_path}
   cp #{extract_path}/* /usr/local/bin/
   EOL
-  not_if { ::File.exists?(extract_path) }
 end
 
 template "/usr/local/bin/mysql-backup.sh" do
