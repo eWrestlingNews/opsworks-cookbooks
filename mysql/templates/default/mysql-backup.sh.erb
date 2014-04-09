@@ -10,7 +10,7 @@ find "<%= node[:mysql_backup][:target_directory] %>" -type f -mtime +<%= node[:m
 echo ""
 
 # Get a list of databases available on the server.
-LIST=$(mysql --user=root --password=<%= node[:mysql][:server_root_password] %> -e "SHOW DATABASES;" | tr -d "| " | grep -v Database)
+LIST=$(mysql --user=root --password=<%= node[:mysql][:server_root_password] %> -e "SHOW DATABASES;" | tr -d "| " | grep -v Database | grep -vi 'information_schema')
 
 # Backup each database to its own file.
 echo "DUMPING DATABASES:"
