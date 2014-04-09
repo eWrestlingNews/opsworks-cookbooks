@@ -21,6 +21,6 @@ default[:mysql_backup][:target_directory] = "/backups"
 default[:mysql_backup][:hour] = "3"
 default[:mysql_backup][:minute] = "0"
 default[:mysql_backup][:retention_days] = 10
-default[:mysql_backup][:xtrabackup] = "http://www.percona.com/redir/downloads/XtraBackup/LATEST/binary/Linux/x86_64/percona-xtrabackup-2.1.8-733-Linux-x86_64.tar.gz"
+default[:mysql_backup][:xtrabackup] = "http://www.percona.com/downloads/XtraBackup/LATEST/binary/Linux/x86_64/percona-xtrabackup-2.1.8-733-Linux-x86_64.tar.gz"
 default[:mysql_backup][:user] = 'root'
 default[:mysql_backup][:password] = nil
