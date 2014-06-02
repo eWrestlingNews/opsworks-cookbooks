@@ -1,4 +1,4 @@
-include_recipe 'configure'
+include_recipe 'rails::configure'
 
 node[:deploy].each do |application, deploy|
   deploy = node[:deploy][application]
