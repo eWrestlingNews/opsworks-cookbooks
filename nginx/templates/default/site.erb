@@ -1,6 +1,6 @@
 server {
   listen 80;
-  server_name <%= @application.domains.sub(/^www\.(.+)$/, '\1').join(" ") %>;
+  server_name <%= @application.domains.sub(/^www\.(.+)$/, '\1').join(" ").gsub("\n", '') %>;
   return 301 www.$server_name$request_uri;
 }
 
