@@ -5,3 +5,4 @@ cookbook 'monit'
 cookbook 'apt'
 cookbook "build-essential"
 cookbook "openssl"
+cookbook 'datadog'
