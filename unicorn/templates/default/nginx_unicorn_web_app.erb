@@ -3,21 +3,19 @@ upstream unicorn_<%= @application[:domains].first %> {
 }
 
 server {
-  listen 80;
-  server_name <%= @application[:domains].map { |d| d.sub(/^www\.(.+)$/, '\1') }.join("\n") %>;
+  listen *:80;
+  server_name <%= @application[:domains].map { |d| d.gsub(/^[w.]+(.+)$/, '\1') }.join("\n") %>;
   return 301 $scheme://www.$host$request_uri;
 }
 
 server {
-  listen 80;
+  listen *:80;
   server_name <%= @application[:domains].join(" ") %>
               <%= node[:opsworks][:instance][:ip] %>
               <%= node[:opsworks][:instance][:private_ip] %>;
   access_log <%= node[:nginx][:log_dir] %>/<%= @application[:domains].first %>.access.log;
 
   keepalive_timeout 5;
-
-  rewrite ^/community(/.*\.php.*)$ http://forum.ewrestlingnews.com$1 last;
 
   root <%= @application[:absolute_document_root] %>;
 
@@ -53,10 +51,10 @@ server {
 
 <% if @application[:ssl_support] %>
 server {
-  listen   443;
+  listen   *:443;
   server_name <%= @application[:domains].join(" ") %> <%= node[:hostname] %>;
   access_log <%= node[:nginx][:log_dir] %>/<%= @application[:domains].first %>-ssl.access.log;
-  
+
   ssl on;
   ssl_certificate /etc/nginx/ssl/<%= @application[:domains].first %>.crt;
   ssl_certificate_key /etc/nginx/ssl/<%= @application[:domains].first %>.key;
