@@ -1,11 +1,11 @@
 server {
-  listen 80;
-  server_name <%= @application.domains.sub(/^www\.(.+)$/, '\1').join(" ").gsub("\n", '') %>;
+  listen *:80;
+  server_name <%= @application.domains.gsub(/www\.(.+)$/, '\1').join(" ").gsub("\n", '') %>;
   return 301 www.$server_name$request_uri;
 }
 
 server {
-  listen   80;
+  listen  *:80;
   server_name  <%= @application[:domains].join(" ") %> <%= node[:hostname] %>;
   access_log  <%= node[:nginx][:log_dir] %>/<%= @application[:domains].first %>.access.log;
 
