@@ -1,12 +1,12 @@
-<% node[:opsworks][:layers]['rails-app'][:instances].each_with_index do |inst, i| %>
-  backend server<%= i %> {
-    .host = "<%= inst[:private_ip] %>";
+<% node[:opsworks][:layers]['rails-app'][:instances].each_value.each_with_index do |inst, i| %>
+  backend server<%= i+1 %> {
+    .host = "<%= inst['private_ip'] %>";
   }
 <% end %>
 
 <% node[:opsworks][:layers]['rails-app'][:instances].length.times do |i| %>
   director backend round-robin {
-    { .backend = server<%= i %>; }
+    { .backend = server<%= i+1 %>; }
   }
 <% end %>
 
