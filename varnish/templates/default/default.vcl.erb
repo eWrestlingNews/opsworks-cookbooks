@@ -1,0 +1,41 @@
+<% node[:opsworks][:layers]['rails-app'][:instances].each_with_index do |inst, i| %>
+  backend server<%= i %> {
+    .host = "<%= inst[:private_ip] %>";
+  }
+<% end %>
+
+<% node[:opsworks][:layers]['rails-app'][:instances].length.times do |i| %>
+  director backend round-robin {
+    { .backend = server<%= i %>; }
+  }
+<% end %>
+
+sub vcl_recv {
+  set req.backend = backend;
+
+  if (req.url ~ "^/profile_widget" ||
+      req.url ~ "^/popular_users_widget" ||
+      req.url ~ "^/video_gallery_widget" ||
+      req.url ~ "^/feed_widget" ||
+      req.url ~ "^/trending_widget" ||
+      req.url ~ "^/$") {
+    unset req.http.Cookie;
+    unset req.http.Authorization;
+    return (lookup);
+  }
+}
+
+# Cookies coming from the backend
+sub vcl_fetch {
+  if (req.url ~ "^/profile_widget" ||
+      req.url ~ "^/popular_users_widget" ||
+      req.url ~ "^/video_gallery_widget" ||
+      req.url ~ "^/feed_widget" ||
+      req.url ~ "^/trending_widget" ||
+      req.url ~ "^/$") {
+    unset beresp.http.Set-Cookie;
+    set beresp.http.cache-control = "public, max-age=900";
+    set beresp.ttl = 1d;
+    return (deliver);
+  }
+}
