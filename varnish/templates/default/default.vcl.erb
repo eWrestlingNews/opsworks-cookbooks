@@ -16,15 +16,12 @@ sub vcl_recv {
 
   call identify_device;
 
-  if (req.url ~ "^/profile_widget" ||
-      req.url ~ "^/popular_users_widget" ||
-      req.url ~ "^/video_gallery_widget" ||
-      req.url ~ "^/feed_widget" ||
-      req.url ~ "^/trending_widget" ||
-      req.url ~ "^/latest" ||
-      req.url ~ "^/news/.+" ||
-      req.url ~ "^/404$" ||
-      req.url ~ "^/articles/.+" ) {
+  if (
+    req.url ~ "^/(profile|popular_users|video_gallery|feed|trending)_widget$" ||
+    req.url ~ "^/(latest|404)$" ||
+    req.url ~ "^/(news|results|lists|articles|posts/.+" ||
+    req.url ~ "^/$"
+  ) {
     unset req.http.Cookie;
     unset req.http.Authorization;
     return (lookup);
@@ -35,15 +32,12 @@ sub vcl_recv {
 sub vcl_fetch {
   set beresp.grace = 1m;
 
-  if (req.url ~ "^/profile_widget" ||
-      req.url ~ "^/popular_users_widget" ||
-      req.url ~ "^/video_gallery_widget" ||
-      req.url ~ "^/feed_widget" ||
-      req.url ~ "^/trending_widget" ||
-      req.url ~ "^/latest" ||
-      req.url ~ "^/news/.+" ||
-      req.url ~ "^/404$" ||
-      req.url ~ "^/articles/.+" ) {
+  if (
+    req.url ~ "^/(profile|popular_users|video_gallery|feed|trending)_widget$" ||
+    req.url ~ "^/(latest|404)$" ||
+    req.url ~ "^/(news|results|lists|articles|posts/.+" ||
+    req.url ~ "^/$"
+  ) {
     unset beresp.http.Set-Cookie;
     set beresp.http.cache-control = "public, max-age=900";
     set beresp.ttl = 1d;
@@ -57,20 +51,20 @@ sub vcl_hash {
 
 # Routine to identify and classify a device based on User-Agent
 sub identify_device {
- 
+
   # Default to classification as a PC
   set req.http.X-Device = "pc";
- 
+
   if (req.http.User-Agent ~ "iPad" ) {
     # The User-Agent indicates it's a iPad - so classify as a tablet
     set req.http.X-Device = "mobile-tablet";
   }
- 
+
   elsif (req.http.User-Agent ~ "iP(hone|od)" || req.http.User-Agent ~ "Android" ) {
     # The User-Agent indicates it's a iPhone, iPod or Android - so let's classify as a touch/smart phone
     set req.http.X-Device = "mobile-smart";
   }
- 
+
   elsif (req.http.User-Agent ~ "SymbianOS" || req.http.User-Agent ~ "^BlackBerry" || req.http.User-Agent ~ "^SonyEricsson" || req.http.User-Agent ~ "^Nokia" || req.http.User-Agent ~ "^SAMSUNG" || req.http.User-Agent ~ "^LG")    {
     # The User-Agent indicates that it is some other mobile devices, so let's classify it as such.
     set req.http.X-Device = "mobile-other";
