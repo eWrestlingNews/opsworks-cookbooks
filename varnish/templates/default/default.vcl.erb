@@ -17,8 +17,7 @@ sub vcl_recv {
       req.url ~ "^/popular_users_widget" ||
       req.url ~ "^/video_gallery_widget" ||
       req.url ~ "^/feed_widget" ||
-      req.url ~ "^/trending_widget" ||
-      req.url ~ "^/$") {
+      req.url ~ "^/trending_widget" ) {
     unset req.http.Cookie;
     unset req.http.Authorization;
     return (lookup);
@@ -31,8 +30,7 @@ sub vcl_fetch {
       req.url ~ "^/popular_users_widget" ||
       req.url ~ "^/video_gallery_widget" ||
       req.url ~ "^/feed_widget" ||
-      req.url ~ "^/trending_widget" ||
-      req.url ~ "^/$") {
+      req.url ~ "^/trending_widget" ) {
     unset beresp.http.Set-Cookie;
     set beresp.http.cache-control = "public, max-age=900";
     set beresp.ttl = 1d;
