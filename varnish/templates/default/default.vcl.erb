@@ -19,7 +19,7 @@ sub vcl_recv {
   if (
     req.url ~ "^/(profile|popular_users|video_gallery|feed|trending)_widget$" ||
     req.url ~ "^/(latest|404)$" ||
-    req.url ~ "^/(news|results|lists|articles|posts/.+" ||
+    req.url ~ "^/(news|results|lists|articles|posts)/.+" ||
     req.url ~ "^/$"
   ) {
     unset req.http.Cookie;
@@ -35,7 +35,7 @@ sub vcl_fetch {
   if (
     req.url ~ "^/(profile|popular_users|video_gallery|feed|trending)_widget$" ||
     req.url ~ "^/(latest|404)$" ||
-    req.url ~ "^/(news|results|lists|articles|posts/.+" ||
+    req.url ~ "^/(news|results|lists|articles|posts)/.+" ||
     req.url ~ "^/$"
   ) {
     unset beresp.http.Set-Cookie;
