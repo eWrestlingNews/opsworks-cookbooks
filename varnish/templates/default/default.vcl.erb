@@ -23,6 +23,7 @@ sub vcl_recv {
       req.url ~ "^/trending_widget" ||
       req.url ~ "^/latest" ||
       req.url ~ "^/news/.+" ||
+      req.url ~ "^/404$" ||
       req.url ~ "^/articles/.+" ) {
     unset req.http.Cookie;
     unset req.http.Authorization;
@@ -41,6 +42,7 @@ sub vcl_fetch {
       req.url ~ "^/trending_widget" ||
       req.url ~ "^/latest" ||
       req.url ~ "^/news/.+" ||
+      req.url ~ "^/404$" ||
       req.url ~ "^/articles/.+" ) {
     unset beresp.http.Set-Cookie;
     set beresp.http.cache-control = "public, max-age=900";
