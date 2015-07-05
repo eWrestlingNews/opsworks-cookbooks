@@ -12,12 +12,14 @@ director backend round-robin {
 
 sub vcl_recv {
   set req.backend = backend;
+  set req.grace = 1m;
 
   if (req.url ~ "^/profile_widget" ||
       req.url ~ "^/popular_users_widget" ||
       req.url ~ "^/video_gallery_widget" ||
       req.url ~ "^/feed_widget" ||
-      req.url ~ "^/trending_widget" ) {
+      req.url ~ "^/trending_widget" ||
+      req.url ~ "^/$") {
     unset req.http.Cookie;
     unset req.http.Authorization;
     return (lookup);
@@ -26,11 +28,14 @@ sub vcl_recv {
 
 # Cookies coming from the backend
 sub vcl_fetch {
+  set beresp.grace = 1m;
+
   if (req.url ~ "^/profile_widget" ||
       req.url ~ "^/popular_users_widget" ||
       req.url ~ "^/video_gallery_widget" ||
       req.url ~ "^/feed_widget" ||
-      req.url ~ "^/trending_widget" ) {
+      req.url ~ "^/trending_widget" ||
+      req.url ~ "^/$") {
     unset beresp.http.Set-Cookie;
     set beresp.http.cache-control = "public, max-age=900";
     set beresp.ttl = 1d;
