@@ -1,14 +1,14 @@
 <% node[:opsworks][:layers]['rails-app'][:instances].each_value.each_with_index do |inst, i| %>
-  backend server<%= i+1 %> {
-    .host = "<%= inst['private_ip'] %>";
-  }
+backend server<%= i+1 %> {
+  .host = "<%= inst['private_ip'] %>";
+}
 <% end %>
 
+director backend round-robin {
 <% node[:opsworks][:layers]['rails-app'][:instances].length.times do |i| %>
-  director backend round-robin {
-    { .backend = server<%= i+1 %>; }
-  }
+  { .backend = server<%= i+1 %>; }
 <% end %>
+}
 
 sub vcl_recv {
   set req.backend = backend;
